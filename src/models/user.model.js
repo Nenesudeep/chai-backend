@@ -52,9 +52,10 @@ const userSchema = new mongoose.Schema(
 );
 
 //middleware when ever the password is changed and saved it will change the password
+// pre hook whenever the user model is saved this operation is done just before that
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
-    this.password = bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, 10);
     next();
   } else {
     return next();
